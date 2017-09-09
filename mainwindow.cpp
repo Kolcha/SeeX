@@ -34,13 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->scrollArea->setBackgroundRole(QPalette::Dark);
 
   ui->actionOpen->setShortcut(QKeySequence::Open);
-  ui->actionSave->setShortcut(QKeySequence::Save);
-
-  ui->actionCopy->setShortcut(QKeySequence::Copy);
-  ui->actionPaste->setShortcut(QKeySequence::Paste);
-
-  ui->actionZoomIn->setShortcut(QKeySequence::ZoomIn);
-  ui->actionZoomOut->setShortcut(QKeySequence::ZoomOut);
 
   img_reader_ = new QImageReader();
   provider_ = new FileProvider(this);
@@ -91,21 +84,6 @@ void MainWindow::on_actionOpen_triggered()
   if (!filename.isEmpty()) openFile(filename);
 }
 
-void MainWindow::on_actionSave_triggered()
-{
-    //
-}
-
-void MainWindow::on_actionCopy_triggered()
-{
-    //
-}
-
-void MainWindow::on_actionPaste_triggered()
-{
-    //
-}
-
 void MainWindow::on_actionNextFrame_triggered()
 {
   Q_ASSERT(cur_frame_ < img_reader_->imageCount());
@@ -116,21 +94,6 @@ void MainWindow::on_actionPreviousFrame_triggered()
 {
   Q_ASSERT(cur_frame_ > 0);
   loadFrame(--cur_frame_);
-}
-
-void MainWindow::on_actionZoomIn_triggered()
-{
-    //
-}
-
-void MainWindow::on_actionZoomOut_triggered()
-{
-    //
-}
-
-void MainWindow::on_actionNormalSize_triggered()
-{
-    //
 }
 
 void MainWindow::loadFrame(int index)

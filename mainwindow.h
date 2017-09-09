@@ -46,17 +46,9 @@ private slots:
   void loadImage(const QString& filename);
 
   void on_actionOpen_triggered();
-  void on_actionSave_triggered();
-
-  void on_actionCopy_triggered();
-  void on_actionPaste_triggered();
 
   void on_actionNextFrame_triggered();
   void on_actionPreviousFrame_triggered();
-
-  void on_actionZoomIn_triggered();
-  void on_actionZoomOut_triggered();
-  void on_actionNormalSize_triggered();
 
 private:
   void loadFrame(int index);

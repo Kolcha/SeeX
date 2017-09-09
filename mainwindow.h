@@ -36,6 +36,9 @@ public:
 public slots:
   void loadFile(const QString& filename);
 
+protected:
+  void resizeEvent(QResizeEvent* event);
+
 private slots:
   void on_actionOpen_triggered();
   void on_actionSave_triggered();
@@ -54,11 +57,11 @@ private slots:
   void on_actionZoomIn_triggered();
   void on_actionZoomOut_triggered();
   void on_actionNormalSize_triggered();
-  void on_actionFit_to_Window_triggered();
 
 private:
   bool tryLoadFile(const QString& file);
   void updateNavigationActions();
+  void updateImage();
 
 private:
   Ui::MainWindow *ui;
@@ -67,6 +70,7 @@ private:
   int cur_index_;
 
   QImageReader* img_reader_;
+  QImage cur_image_;
 };
 
 #endif // MAINWINDOW_H

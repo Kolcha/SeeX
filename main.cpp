@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 {
   QApplication::setApplicationDisplayName("SeeX");
   QApplication::setApplicationName("SeeX");
-  QApplication::setApplicationVersion("1.0.0.12");
+  QApplication::setApplicationVersion("1.0.0.21");
   QApplication::setOrganizationName("Nick Korotysh");
   QApplication::setOrganizationDomain("seex.kolcha.github.io");
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   Application a(argc, argv);
   MainWindow w;
   QObject::connect(&a, &Application::fileOpened, &w, &MainWindow::loadFile);
-  w.show();
+  w.showMaximized();
 
   return a.exec();
 }

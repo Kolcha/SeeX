@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
 
+  ui->scrollArea->setBackgroundRole(QPalette::Dark);
+
   ui->actionOpen->setShortcut(QKeySequence::Open);
   ui->actionSave->setShortcut(QKeySequence::Save);
 
@@ -62,6 +64,12 @@ void MainWindow::loadFile(const QString& filename)
     ui->actionFirstFile->setEnabled(true);
     ui->actionLastFile->setEnabled(true);
   }
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+  if (!cur_image_.isNull()) updateImage();
+  QMainWindow::resizeEvent(event);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -138,11 +146,6 @@ void MainWindow::on_actionNormalSize_triggered()
     //
 }
 
-void MainWindow::on_actionFit_to_Window_triggered()
-{
-  //
-}
-
 bool MainWindow::tryLoadFile(const QString& file)
 {
   updateNavigationActions();
@@ -150,9 +153,9 @@ bool MainWindow::tryLoadFile(const QString& file)
   img_reader_->setAutoDetectImageFormat(true);
   img_reader_->setAutoTransform(true);
   if (img_reader_->canRead()) {
-    QImage img = img_reader_->read();
-    if (!img.isNull()) {
-      ui->label->setPixmap(QPixmap::fromImage(img));
+    cur_image_ = img_reader_->read();
+    if (!cur_image_.isNull()) {
+      updateImage();
       setWindowFilePath(file);
       return true;
     }
@@ -164,4 +167,16 @@ void MainWindow::updateNavigationActions()
 {
   ui->actionNextFile->setDisabled(cur_index_ == files_.size() - 1);
   ui->actionPreviousFile->setDisabled(cur_index_ == 0);
+  ui->actionFirstFile->setEnabled(ui->actionPreviousFile->isEnabled());
+  ui->actionLastFile->setEnabled(ui->actionNextFile->isEnabled());
+}
+
+void MainWindow::updateImage()
+{
+  if (cur_image_.width() > ui->label->width() || cur_image_.height() > ui->label->height()) {
+    QImage img = cur_image_.scaled(ui->label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->label->setPixmap(QPixmap::fromImage(img));
+  } else {
+    ui->label->setPixmap(QPixmap::fromImage(cur_image_));
+  }
 }

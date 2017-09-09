@@ -61,6 +61,7 @@ QString FileProvider::absolutePath() const
 
 void FileProvider::scanDir(const QString& path)
 {
+  setCurrentIndex(-1);
   dir_.setPath(path);
   files_ = dir_.entryList();
   emit filesCountChanged(files_.size());
@@ -109,12 +110,13 @@ void FileProvider::lastFile()
 
 QString FileProvider::fileAtIndex(const int idx) const
 {
+  Q_ASSERT(0 <= idx && idx < filesCount());
   return dir_.absoluteFilePath(files_[idx]);
 }
 
 void FileProvider::setCurrentIndex(const int idx)
 {
-  Q_ASSERT(0 <= idx && idx < filesCount());
+  Q_ASSERT(-1 <= idx && idx < filesCount());
   cur_index_ = idx;
   emit currentFileChanged(currentFile());
 }

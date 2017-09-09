@@ -65,6 +65,8 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::loadImage(const QString& filename)
 {
+  if (filename.isEmpty()) return;
+
   img_reader_->setFileName(filename);
   img_reader_->setAutoTransform(true);
   img_reader_->setDecideFormatFromContent(true);

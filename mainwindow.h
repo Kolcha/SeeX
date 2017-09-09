@@ -51,13 +51,14 @@ private slots:
   void on_actionNextFrame_triggered();
   void on_actionPreviousFrame_triggered();
 
-  void on_actionZoon_In_triggered();
-  void on_actionZoom_Out_triggered();
-  void on_actionNormal_Size_triggered();
+  void on_actionZoomIn_triggered();
+  void on_actionZoomOut_triggered();
+  void on_actionNormalSize_triggered();
   void on_actionFit_to_Window_triggered();
 
 private:
   bool tryLoadFile(const QString& file);
+  void updateNavigationActions();
 
 private:
   Ui::MainWindow *ui;

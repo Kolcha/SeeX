@@ -19,10 +19,14 @@
 #include "mainwindow.h"
 #include "application.h"
 
-// build 4
-
 int main(int argc, char *argv[])
 {
+  QApplication::setApplicationDisplayName("SeeX");
+  QApplication::setApplicationName("SeeX");
+  QApplication::setApplicationVersion("1.0.0.12");
+  QApplication::setOrganizationName("Nick Korotysh");
+  QApplication::setOrganizationDomain("seex.kolcha.github.io");
+
   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
   Application a(argc, argv);

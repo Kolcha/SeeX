@@ -6,15 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>597</width>
+    <height>407</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QScrollArea" name="scrollArea">
       <property name="widgetResizable">
@@ -25,11 +34,23 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>380</width>
-         <height>219</height>
+         <width>595</width>
+         <height>344</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
@@ -51,7 +72,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>597</width>
      <height>22</height>
     </rect>
    </property>
@@ -85,9 +106,9 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionZoon_In"/>
-    <addaction name="actionZoom_Out"/>
-    <addaction name="actionNormal_Size"/>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+    <addaction name="actionNormalSize"/>
     <addaction name="actionFit_to_Window"/>
    </widget>
    <addaction name="menuFile"/>
@@ -110,21 +131,33 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save...</string>
    </property>
   </action>
   <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
   </action>
   <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Paste</string>
    </property>
   </action>
   <action name="actionNextFile">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Next File</string>
    </property>
@@ -133,6 +166,9 @@
    </property>
   </action>
   <action name="actionPreviousFile">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Previous File</string>
    </property>
@@ -141,6 +177,9 @@
    </property>
   </action>
   <action name="actionFirstFile">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>First File</string>
    </property>
@@ -149,6 +188,9 @@
    </property>
   </action>
   <action name="actionLastFile">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Last File</string>
    </property>
@@ -157,6 +199,9 @@
    </property>
   </action>
   <action name="actionNextFrame">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Next Frame</string>
    </property>
@@ -165,6 +210,9 @@
    </property>
   </action>
   <action name="actionPreviousFrame">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Previous Frame</string>
    </property>
@@ -172,22 +220,37 @@
     <string>Alt+Left</string>
    </property>
   </action>
-  <action name="actionZoon_In">
+  <action name="actionZoomIn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>Zoon In</string>
+    <string>Zoom In</string>
    </property>
   </action>
-  <action name="actionZoom_Out">
+  <action name="actionZoomOut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Zoom Out</string>
    </property>
   </action>
-  <action name="actionNormal_Size">
+  <action name="actionNormalSize">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Normal Size</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
   </action>
   <action name="actionFit_to_Window">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Fit to Window</string>
    </property>

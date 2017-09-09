@@ -30,6 +30,16 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
+
+  ui->actionOpen->setShortcut(QKeySequence::Open);
+  ui->actionSave->setShortcut(QKeySequence::Save);
+
+  ui->actionCopy->setShortcut(QKeySequence::Copy);
+  ui->actionPaste->setShortcut(QKeySequence::Paste);
+
+  ui->actionZoomIn->setShortcut(QKeySequence::ZoomIn);
+  ui->actionZoomOut->setShortcut(QKeySequence::ZoomOut);
+
   img_reader_ = new QImageReader();
 }
 
@@ -45,10 +55,12 @@ void MainWindow::loadFile(const QString& filename)
     QFileInfo fi(filename);
     QDir::setCurrent(fi.absolutePath());
     QDir cur_dir = QDir::current();
-    cur_dir.setFilter(QDir::Files | QDir::Hidden | QDir::Readable);
+    cur_dir.setFilter(QDir::Files | QDir::Readable);
     cur_dir.setSorting(QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
     files_ = cur_dir.entryList();
     cur_index_ = files_.indexOf(fi.fileName());
+    ui->actionFirstFile->setEnabled(true);
+    ui->actionLastFile->setEnabled(true);
   }
 }
 
@@ -91,14 +103,14 @@ void MainWindow::on_actionFirstFile_triggered()
 {
   Q_ASSERT(!files_.isEmpty());
   cur_index_ = 0;
-  while (++cur_index_ < files_.size() && !tryLoadFile(files_[cur_index_]));
+  while (cur_index_ < files_.size() && !tryLoadFile(files_[cur_index_])) ++cur_index_;
 }
 
 void MainWindow::on_actionLastFile_triggered()
 {
   Q_ASSERT(!files_.isEmpty());
   cur_index_ = files_.size() - 1;
-  while (--cur_index_ >= 0 && !tryLoadFile(files_[cur_index_]));
+  while (cur_index_ >= 0 && !tryLoadFile(files_[cur_index_])) --cur_index_;
 }
 
 void MainWindow::on_actionNextFrame_triggered()
@@ -111,17 +123,17 @@ void MainWindow::on_actionPreviousFrame_triggered()
     //
 }
 
-void MainWindow::on_actionZoon_In_triggered()
+void MainWindow::on_actionZoomIn_triggered()
 {
     //
 }
 
-void MainWindow::on_actionZoom_Out_triggered()
+void MainWindow::on_actionZoomOut_triggered()
 {
     //
 }
 
-void MainWindow::on_actionNormal_Size_triggered()
+void MainWindow::on_actionNormalSize_triggered()
 {
     //
 }
@@ -133,6 +145,7 @@ void MainWindow::on_actionFit_to_Window_triggered()
 
 bool MainWindow::tryLoadFile(const QString& file)
 {
+  updateNavigationActions();
   img_reader_->setFileName(file);
   img_reader_->setAutoDetectImageFormat(true);
   img_reader_->setAutoTransform(true);
@@ -145,4 +158,10 @@ bool MainWindow::tryLoadFile(const QString& file)
     }
   }
   return false;
+}
+
+void MainWindow::updateNavigationActions()
+{
+  ui->actionNextFile->setDisabled(cur_index_ == files_.size() - 1);
+  ui->actionPreviousFile->setDisabled(cur_index_ == 0);
 }

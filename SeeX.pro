@@ -13,10 +13,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
         application.cpp \
+        fileprovider.cpp \
         mainwindow.cpp
 
 HEADERS += \
         application.h \
+        fileprovider.h \
         mainwindow.h
 
 FORMS += \

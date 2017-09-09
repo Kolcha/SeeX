@@ -21,6 +21,9 @@
 
 #include <QMainWindow>
 
+
+class FileProvider;
+
 namespace Ui {
 class MainWindow;
 }
@@ -34,22 +37,19 @@ public:
   ~MainWindow();
 
 public slots:
-  void loadFile(const QString& filename);
+  void openFile(const QString& filename);
 
 protected:
   void resizeEvent(QResizeEvent* event);
 
 private slots:
+  void loadImage(const QString& filename);
+
   void on_actionOpen_triggered();
   void on_actionSave_triggered();
 
   void on_actionCopy_triggered();
   void on_actionPaste_triggered();
-
-  void on_actionNextFile_triggered();
-  void on_actionPreviousFile_triggered();
-  void on_actionFirstFile_triggered();
-  void on_actionLastFile_triggered();
 
   void on_actionNextFrame_triggered();
   void on_actionPreviousFrame_triggered();
@@ -59,18 +59,17 @@ private slots:
   void on_actionNormalSize_triggered();
 
 private:
-  bool tryLoadFile(const QString& file);
+  void loadFrame(int index);
   void updateNavigationActions();
   void updateImage();
 
 private:
   Ui::MainWindow *ui;
 
-  QStringList files_;
-  int cur_index_;
-
+  FileProvider* provider_;
   QImageReader* img_reader_;
   QImage cur_image_;
+  int cur_frame_;
 };
 
 #endif // MAINWINDOW_H

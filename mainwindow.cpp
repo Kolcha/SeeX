@@ -20,10 +20,10 @@
 #include "ui_mainwindow.h"
 
 #include <QFileDialog>
-#include <QDir>
-#include <QFile>
 #include <QFileInfo>
 #include <QImageReader>
+
+#include "fileprovider.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -43,6 +43,12 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->actionZoomOut->setShortcut(QKeySequence::ZoomOut);
 
   img_reader_ = new QImageReader();
+  provider_ = new FileProvider(this);
+  connect(ui->actionNextFile, &QAction::triggered, provider_, &FileProvider::nextFile);
+  connect(ui->actionPreviousFile, &QAction::triggered, provider_, &FileProvider::previousFile);
+  connect(ui->actionFirstFile, &QAction::triggered, provider_, &FileProvider::firstFile);
+  connect(ui->actionLastFile, &QAction::triggered, provider_, &FileProvider::lastFile);
+  connect(provider_, &FileProvider::currentFileChanged, this, &MainWindow::loadImage);
 }
 
 MainWindow::~MainWindow()
@@ -51,19 +57,11 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
-void MainWindow::loadFile(const QString& filename)
+void MainWindow::openFile(const QString& filename)
 {
-  if (tryLoadFile(filename)) {
-    QFileInfo fi(filename);
-    QDir::setCurrent(fi.absolutePath());
-    QDir cur_dir = QDir::current();
-    cur_dir.setFilter(QDir::Files | QDir::Readable);
-    cur_dir.setSorting(QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
-    files_ = cur_dir.entryList();
-    cur_index_ = files_.indexOf(fi.fileName());
-    ui->actionFirstFile->setEnabled(true);
-    ui->actionLastFile->setEnabled(true);
-  }
+  QFileInfo fi(filename);
+  provider_->scanDir(fi.absolutePath());
+  provider_->setCurrentFile(fi.absoluteFilePath());
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -72,10 +70,25 @@ void MainWindow::resizeEvent(QResizeEvent* event)
   QMainWindow::resizeEvent(event);
 }
 
+void MainWindow::loadImage(const QString& filename)
+{
+  img_reader_->setFileName(filename);
+  img_reader_->setAutoTransform(true);
+  img_reader_->setDecideFormatFromContent(true);
+
+  if (img_reader_->canRead()) {
+    cur_frame_ = 0;
+    updateNavigationActions();
+    cur_image_ = img_reader_->read();
+    updateImage();
+    setWindowFilePath(filename);
+  }
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
   QString filename = QFileDialog::getOpenFileName(this);
-  if (!filename.isEmpty()) loadFile(filename);
+  if (!filename.isEmpty()) openFile(filename);
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -93,42 +106,16 @@ void MainWindow::on_actionPaste_triggered()
     //
 }
 
-void MainWindow::on_actionNextFile_triggered()
-{
-  Q_ASSERT(!files_.isEmpty());
-  Q_ASSERT(cur_index_ < files_.size() - 1);
-  while (++cur_index_ < files_.size() && !tryLoadFile(files_[cur_index_]));
-}
-
-void MainWindow::on_actionPreviousFile_triggered()
-{
-  Q_ASSERT(!files_.isEmpty());
-  Q_ASSERT(cur_index_ > 0);
-  while (--cur_index_ >= 0 && !tryLoadFile(files_[cur_index_]));
-}
-
-void MainWindow::on_actionFirstFile_triggered()
-{
-  Q_ASSERT(!files_.isEmpty());
-  cur_index_ = 0;
-  while (cur_index_ < files_.size() && !tryLoadFile(files_[cur_index_])) ++cur_index_;
-}
-
-void MainWindow::on_actionLastFile_triggered()
-{
-  Q_ASSERT(!files_.isEmpty());
-  cur_index_ = files_.size() - 1;
-  while (cur_index_ >= 0 && !tryLoadFile(files_[cur_index_])) --cur_index_;
-}
-
 void MainWindow::on_actionNextFrame_triggered()
 {
-    //
+  Q_ASSERT(cur_frame_ < img_reader_->imageCount());
+  loadFrame(++cur_frame_);
 }
 
 void MainWindow::on_actionPreviousFrame_triggered()
 {
-    //
+  Q_ASSERT(cur_frame_ > 0);
+  loadFrame(--cur_frame_);
 }
 
 void MainWindow::on_actionZoomIn_triggered()
@@ -146,29 +133,24 @@ void MainWindow::on_actionNormalSize_triggered()
     //
 }
 
-bool MainWindow::tryLoadFile(const QString& file)
+void MainWindow::loadFrame(int index)
 {
-  updateNavigationActions();
-  img_reader_->setFileName(file);
-  img_reader_->setAutoDetectImageFormat(true);
-  img_reader_->setAutoTransform(true);
-  if (img_reader_->canRead()) {
+  if (img_reader_->jumpToImage(index) && img_reader_->canRead()) {
     cur_image_ = img_reader_->read();
-    if (!cur_image_.isNull()) {
-      updateImage();
-      setWindowFilePath(file);
-      return true;
-    }
+    if (!cur_image_.isNull()) updateImage();
   }
-  return false;
+  updateNavigationActions();
 }
 
 void MainWindow::updateNavigationActions()
 {
-  ui->actionNextFile->setDisabled(cur_index_ == files_.size() - 1);
-  ui->actionPreviousFile->setDisabled(cur_index_ == 0);
+  ui->actionNextFile->setDisabled(provider_->currentIndex() == provider_->filesCount() - 1);
+  ui->actionPreviousFile->setDisabled(provider_->currentIndex() == 0);
   ui->actionFirstFile->setEnabled(ui->actionPreviousFile->isEnabled());
   ui->actionLastFile->setEnabled(ui->actionNextFile->isEnabled());
+  int frames_count = img_reader_->imageCount();
+  ui->actionNextFrame->setDisabled(frames_count <= 1 || cur_frame_ == frames_count - 1);
+  ui->actionPreviousFrame->setDisabled(frames_count <= 1 || cur_frame_ == 0);
 }
 
 void MainWindow::updateImage()

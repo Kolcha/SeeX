@@ -52,7 +52,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="ImageLabel" name="label">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -217,6 +217,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ImageLabel</class>
+   <extends>QLabel</extends>
+   <header>imagelabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

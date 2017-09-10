@@ -16,23 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include "application.h"
+#ifndef IMAGELABEL_H
+#define IMAGELABEL_H
 
-int main(int argc, char *argv[])
+#include <QLabel>
+
+class ImageLabel : public QLabel
 {
-  QApplication::setApplicationDisplayName("SeeX");
-  QApplication::setApplicationName("SeeX");
-  QApplication::setApplicationVersion("1.0.1.45");
-  QApplication::setOrganizationName("Nick Korotysh");
-  QApplication::setOrganizationDomain("seex.kolcha.github.io");
+  Q_OBJECT
+public:
+  explicit ImageLabel(QWidget *parent = nullptr);
 
-  QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+protected:
+  void paintEvent(QPaintEvent* event);
 
-  Application a(argc, argv);
-  MainWindow w;
-  QObject::connect(&a, &Application::fileOpened, &w, &MainWindow::openFile);
-  w.showMaximized();
+private:
+  QPixmap transp_txd_;
+};
 
-  return a.exec();
-}
+#endif // IMAGELABEL_H

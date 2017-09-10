@@ -16,23 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include "application.h"
+#include "imagelabel.h"
 
-int main(int argc, char *argv[])
+#include <QPainter>
+
+ImageLabel::ImageLabel(QWidget *parent) : QLabel(parent), transp_txd_(16, 16)
 {
-  QApplication::setApplicationDisplayName("SeeX");
-  QApplication::setApplicationName("SeeX");
-  QApplication::setApplicationVersion("1.0.1.45");
-  QApplication::setOrganizationName("Nick Korotysh");
-  QApplication::setOrganizationDomain("seex.kolcha.github.io");
+  transp_txd_.fill(Qt::white);
+  QPainter p(&transp_txd_);
+  for (int i = 0; i < 2; ++i) {
+    for (int j = 0; j < 2; ++j) {
+      QRect r(j*8, i*8, 8, 8);
+      p.fillRect(r, (i+j) % 2 == 0 ? QColor(200, 200, 200) : QColor(220, 220, 220));
+    }
+  }
+  setAlignment(Qt::AlignCenter);
+}
 
-  QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-
-  Application a(argc, argv);
-  MainWindow w;
-  QObject::connect(&a, &Application::fileOpened, &w, &MainWindow::openFile);
-  w.showMaximized();
-
-  return a.exec();
+void ImageLabel::paintEvent(QPaintEvent* event)
+{
+  if (pixmap() && pixmap()->hasAlpha()) {
+    QPainter p(this);
+    QRect img_rect(rect().center() - pixmap()->rect().center(), pixmap()->size());
+    p.fillRect(img_rect, transp_txd_);
+  }
+  QLabel::paintEvent(event);
 }

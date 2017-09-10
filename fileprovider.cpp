@@ -32,8 +32,6 @@ static bool isFileSupported(const QString& file)
 
 FileProvider::FileProvider(QObject *parent) : QObject(parent), cur_index_(-1)
 {
-  dir_.setFilter(QDir::Files | QDir::Readable);
-  dir_.setSorting(QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
 }
 
 QString FileProvider::currentFile() const
@@ -63,7 +61,7 @@ void FileProvider::scanDir(const QString& path)
 {
   setCurrentIndex(-1);
   dir_.setPath(path);
-  files_ = dir_.entryList();
+  files_ = dir_.entryList(QDir::Files | QDir::Readable, QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
   emit filesCountChanged(files_.size());
 }
 

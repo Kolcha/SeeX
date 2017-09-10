@@ -23,6 +23,7 @@
 
 
 class FileProvider;
+class FrameProvider;
 
 namespace Ui {
 class MainWindow;
@@ -43,25 +44,21 @@ protected:
   void resizeEvent(QResizeEvent* event);
 
 private slots:
-  void loadImage(const QString& filename);
+  void displayImage(const QImage& img);
 
   void on_actionOpen_triggered();
 
-  void on_actionNextFrame_triggered();
-  void on_actionPreviousFrame_triggered();
-
 private:
-  void loadFrame(int index);
   void updateNavigationActions();
   void updateImage();
 
 private:
   Ui::MainWindow *ui;
 
-  FileProvider* provider_;
-  QImageReader* img_reader_;
+  FileProvider* fi_provider_;
+  FrameProvider* fr_provider_;
+
   QImage cur_image_;
-  int cur_frame_;
 };
 
 #endif // MAINWINDOW_H

@@ -21,9 +21,9 @@
 
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QImageReader>
 
 #include "fileprovider.h"
+#include "frameprovider.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -35,26 +35,30 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ui->actionOpen->setShortcut(QKeySequence::Open);
 
-  img_reader_ = new QImageReader();
-  provider_ = new FileProvider(this);
-  connect(ui->actionNextFile, &QAction::triggered, provider_, &FileProvider::nextFile);
-  connect(ui->actionPreviousFile, &QAction::triggered, provider_, &FileProvider::previousFile);
-  connect(ui->actionFirstFile, &QAction::triggered, provider_, &FileProvider::firstFile);
-  connect(ui->actionLastFile, &QAction::triggered, provider_, &FileProvider::lastFile);
-  connect(provider_, &FileProvider::currentFileChanged, this, &MainWindow::loadImage);
+  fi_provider_ = new FileProvider(this);
+  connect(ui->actionNextFile, &QAction::triggered, fi_provider_, &FileProvider::nextFile);
+  connect(ui->actionPreviousFile, &QAction::triggered, fi_provider_, &FileProvider::previousFile);
+  connect(ui->actionFirstFile, &QAction::triggered, fi_provider_, &FileProvider::firstFile);
+  connect(ui->actionLastFile, &QAction::triggered, fi_provider_, &FileProvider::lastFile);
+
+  fr_provider_ = new FrameProvider(this);
+  connect(fi_provider_, &FileProvider::currentFileChanged, fr_provider_, &FrameProvider::setFileName);
+  connect(ui->actionNextFrame, &QAction::triggered, fr_provider_, &FrameProvider::nextFrame);
+  connect(ui->actionPreviousFrame, &QAction::triggered, fr_provider_, &FrameProvider::previousFrame);
+  connect(fr_provider_, &FrameProvider::fileNameChanged, this, &MainWindow::setWindowFilePath);
+  connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::displayImage);
 }
 
 MainWindow::~MainWindow()
 {
-  delete img_reader_;
   delete ui;
 }
 
 void MainWindow::openFile(const QString& filename)
 {
   QFileInfo fi(filename);
-  provider_->scanDir(fi.absolutePath());
-  provider_->setCurrentFile(fi.absoluteFilePath());
+  fi_provider_->scanDir(fi.absolutePath());
+  fi_provider_->setCurrentFile(fi.absoluteFilePath());
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -63,21 +67,11 @@ void MainWindow::resizeEvent(QResizeEvent* event)
   QMainWindow::resizeEvent(event);
 }
 
-void MainWindow::loadImage(const QString& filename)
+void MainWindow::displayImage(const QImage& img)
 {
-  if (filename.isEmpty()) return;
-
-  img_reader_->setFileName(filename);
-  img_reader_->setAutoTransform(true);
-  img_reader_->setDecideFormatFromContent(true);
-
-  if (img_reader_->canRead()) {
-    cur_frame_ = 0;
-    updateNavigationActions();
-    cur_image_ = img_reader_->read();
-    updateImage();
-    setWindowFilePath(filename);
-  }
+  cur_image_ = img;
+  updateImage();
+  updateNavigationActions();
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -86,36 +80,15 @@ void MainWindow::on_actionOpen_triggered()
   if (!filename.isEmpty()) openFile(filename);
 }
 
-void MainWindow::on_actionNextFrame_triggered()
-{
-  Q_ASSERT(cur_frame_ < img_reader_->imageCount());
-  loadFrame(++cur_frame_);
-}
-
-void MainWindow::on_actionPreviousFrame_triggered()
-{
-  Q_ASSERT(cur_frame_ > 0);
-  loadFrame(--cur_frame_);
-}
-
-void MainWindow::loadFrame(int index)
-{
-  if (img_reader_->jumpToImage(index) && img_reader_->canRead()) {
-    cur_image_ = img_reader_->read();
-    if (!cur_image_.isNull()) updateImage();
-  }
-  updateNavigationActions();
-}
-
 void MainWindow::updateNavigationActions()
 {
-  ui->actionNextFile->setDisabled(provider_->currentIndex() == provider_->filesCount() - 1);
-  ui->actionPreviousFile->setDisabled(provider_->currentIndex() == 0);
+  ui->actionNextFile->setDisabled(fi_provider_->currentIndex() == fi_provider_->filesCount() - 1);
+  ui->actionPreviousFile->setDisabled(fi_provider_->currentIndex() == 0);
   ui->actionFirstFile->setEnabled(ui->actionPreviousFile->isEnabled());
   ui->actionLastFile->setEnabled(ui->actionNextFile->isEnabled());
-  int frames_count = img_reader_->imageCount();
-  ui->actionNextFrame->setDisabled(frames_count <= 1 || cur_frame_ == frames_count - 1);
-  ui->actionPreviousFrame->setDisabled(frames_count <= 1 || cur_frame_ == 0);
+  int frames_count = fr_provider_->framesCount();
+  ui->actionNextFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == frames_count - 1);
+  ui->actionPreviousFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == 0);
 }
 
 void MainWindow::updateImage()

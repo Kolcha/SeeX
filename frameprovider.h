@@ -30,6 +30,7 @@ class FrameProvider : public QObject
   Q_PROPERTY(QImage currentFrame READ currentFrame NOTIFY currentFrameChanged)
   Q_PROPERTY(int framesCount READ framesCount NOTIFY framesCountChanged)
   Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
+  Q_PROPERTY(QString fileFormat READ fileFormat)
 
 public:
   explicit FrameProvider(QObject *parent = nullptr);
@@ -38,6 +39,7 @@ public:
   int currentIndex() const;
   int framesCount() const;
   QString fileName() const;
+  QString fileFormat() const;
 
 signals:
   void currentFrameChanged(const QImage& img);
@@ -62,6 +64,7 @@ private:
   QImageReader reader_;
   QVector<QImage> frames_;
   int cur_index_;
+  QString file_format_;
 };
 
 #endif // FRAMEPROVIDER_H

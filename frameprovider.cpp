@@ -49,6 +49,11 @@ QString FrameProvider::fileName() const
   return reader_.fileName();
 }
 
+QString FrameProvider::fileFormat() const
+{
+  return file_format_;
+}
+
 void FrameProvider::setFileName(const QString& filename)
 {
   if (reader_.fileName() == filename) return;
@@ -59,6 +64,7 @@ void FrameProvider::setFileName(const QString& filename)
   frames_.clear();
   delays_.clear();
   reader_.setFileName(filename);
+  file_format_ = QString(reader_.format()).toUpper();
 
   if (reader_.supportsAnimation()) {
     while (reader_.canRead()) {

@@ -41,11 +41,15 @@ public:
 public slots:
   void openFile(const QString& filename);
 
+protected:
+  void resizeEvent(QResizeEvent* event);
+
 private slots:
   void on_actionOpen_triggered();
 
 private:
   void updateNavigationActions();
+  void updateStatusBar();
 
 private:
   Ui::MainWindow *ui;

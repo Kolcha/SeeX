@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(fr_provider_, &FrameProvider::fileNameChanged, this, &MainWindow::setWindowFilePath);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, ui->label, &ImageLabel::setImage);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateNavigationActions);
+  connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateStatusBar);
 
   st_file_ = new StatusLabel(":/images/status/folder.svg", "0/0");
   st_frame_ = new StatusLabel(":/images/status/frame.svg", "0/0");
@@ -57,9 +58,9 @@ MainWindow::MainWindow(QWidget *parent) :
   st_format_ = new StatusLabel(":/images/status/file.svg", "-");
   ui->statusBar->addWidget(st_file_);
   ui->statusBar->addWidget(st_frame_);
-  ui->statusBar->addPermanentWidget(st_zoom_);
-  ui->statusBar->addPermanentWidget(st_resolution_);
   ui->statusBar->addPermanentWidget(st_format_);
+  ui->statusBar->addPermanentWidget(st_resolution_);
+  ui->statusBar->addPermanentWidget(st_zoom_);
 }
 
 MainWindow::~MainWindow()
@@ -72,6 +73,12 @@ void MainWindow::openFile(const QString& filename)
   QFileInfo fi(filename);
   fi_provider_->scanDir(fi.absolutePath());
   fi_provider_->setCurrentFile(fi.absoluteFilePath());
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+  updateStatusBar();
+  QMainWindow::resizeEvent(event);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -89,4 +96,19 @@ void MainWindow::updateNavigationActions()
   int frames_count = fr_provider_->framesCount();
   ui->actionNextFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == frames_count - 1);
   ui->actionPreviousFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == 0);
+}
+
+void MainWindow::updateStatusBar()
+{
+  st_file_->setText(QString("%1/%2").arg(fi_provider_->currentIndex() + 1).arg(fi_provider_->filesCount()));
+  st_frame_->setText(QString("%1/%2").arg(fr_provider_->currentIndex() + 1).arg(fr_provider_->framesCount()));
+  QImage cur_img = ui->label->image();
+  if (cur_img.isNull()) {
+    st_zoom_->setText("100 %");
+    st_format_->setText("-");
+  } else {
+    st_zoom_->setText(QString("%1 %").arg(100 * ui->label->pixmap()->height() / cur_img.height()));
+    st_format_->setText(fr_provider_->fileFormat());
+  }
+  st_resolution_->setText(QString("%1x%2").arg(cur_img.width()).arg(cur_img.height()));
 }

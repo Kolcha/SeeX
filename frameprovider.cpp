@@ -23,6 +23,7 @@ FrameProvider::FrameProvider(QObject *parent) : QObject(parent), cur_index_(-1)
   reader_.setAutoDetectImageFormat(true);
   reader_.setAutoTransform(true);
   reader_.setDecideFormatFromContent(true);
+  connect(&timer_, &QTimer::timeout, this, &FrameProvider::onTimer);
 }
 
 QImage FrameProvider::currentFrame() const
@@ -52,14 +53,21 @@ void FrameProvider::setFileName(const QString& filename)
 {
   if (reader_.fileName() == filename) return;
 
+  if (timer_.isActive()) timer_.stop();
+
   int old_count = frames_.size();
   frames_.clear();
+  delays_.clear();
   reader_.setFileName(filename);
 
   if (reader_.supportsAnimation()) {
     while (reader_.canRead()) {
       frames_.push_back(reader_.read());
+      delays_.push_back(reader_.nextImageDelay());
     }
+    Q_ASSERT(delays_.size() == frames_.size());
+    timer_.setSingleShot(true);
+    timer_.start(delays_.first());
   } else {
     while (reader_.canRead()) {
       frames_.push_back(reader_.read());
@@ -86,6 +94,15 @@ void FrameProvider::previousFrame()
 {
   Q_ASSERT(0 < currentIndex() && currentIndex() < framesCount());
   setCurrentIndex(currentIndex() - 1);
+}
+
+void FrameProvider::onTimer()
+{
+  if (currentIndex() == framesCount() - 1)
+    setCurrentIndex(0);
+  else
+    setCurrentIndex(currentIndex() + 1);
+  timer_.start(delays_[currentIndex()]);
 }
 
 void FrameProvider::setCurrentIndex(const int idx)

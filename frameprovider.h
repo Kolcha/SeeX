@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include <QTimer>
 #include <QImageReader>
 
 class FrameProvider : public QObject
@@ -49,10 +50,15 @@ public slots:
   void nextFrame();
   void previousFrame();
 
+private slots:
+  void onTimer();
+
 private:
   void setCurrentIndex(const int idx);
 
 private:
+  QTimer timer_;
+  QVector<int> delays_;
   QImageReader reader_;
   QVector<QImage> frames_;
   int cur_index_;

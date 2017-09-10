@@ -24,6 +24,7 @@
 
 #include "fileprovider.h"
 #include "frameprovider.h"
+#include "statuslabel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -48,6 +49,17 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(fr_provider_, &FrameProvider::fileNameChanged, this, &MainWindow::setWindowFilePath);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, ui->label, &ImageLabel::setImage);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateNavigationActions);
+
+  st_file_ = new StatusLabel(":/images/status/folder.svg", "0/0");
+  st_frame_ = new StatusLabel(":/images/status/frame.svg", "0/0");
+  st_zoom_ = new StatusLabel(":/images/status/zoom.svg", "100 %");
+  st_resolution_ = new StatusLabel(":/images/status/resolution.svg", "0x0");
+  st_format_ = new StatusLabel(":/images/status/file.svg", "-");
+  ui->statusBar->addWidget(st_file_);
+  ui->statusBar->addWidget(st_frame_);
+  ui->statusBar->addPermanentWidget(st_zoom_);
+  ui->statusBar->addPermanentWidget(st_resolution_);
+  ui->statusBar->addPermanentWidget(st_format_);
 }
 
 MainWindow::~MainWindow()

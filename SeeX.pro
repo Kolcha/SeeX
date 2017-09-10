@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets svg
 
 TARGET = SeeX
 TEMPLATE = app
@@ -16,14 +16,19 @@ SOURCES += main.cpp \
         fileprovider.cpp \
         frameprovider.cpp \
         imagelabel.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        statuslabel.cpp
 
 HEADERS += \
         application.h \
         fileprovider.h \
         frameprovider.h \
         imagelabel.h \
-        mainwindow.h
+        mainwindow.h \
+        statuslabel.h
 
 FORMS += \
         mainwindow.ui
+
+RESOURCES += \
+        images.qrc

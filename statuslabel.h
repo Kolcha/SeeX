@@ -16,48 +16,35 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef STATUSLABEL_H
+#define STATUSLABEL_H
 
-#include <QMainWindow>
+#include <QWidget>
 
+class QLabel;
 
-class FileProvider;
-class FrameProvider;
-class StatusLabel;
-
-namespace Ui {
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class StatusLabel : public QWidget
 {
   Q_OBJECT
+  Q_PROPERTY(QPixmap icon READ icon WRITE setIcon)
+  Q_PROPERTY(QString text READ text WRITE setText)
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
-  ~MainWindow();
+  explicit StatusLabel(QWidget *parent = nullptr);
+  StatusLabel(const QPixmap& pxm, const QString& txt, QWidget* parent = nullptr);
+  StatusLabel(const QString& pxm, const QString& txt, QWidget* parent = nullptr);
+
+  QPixmap icon() const;
+  QString text() const;
 
 public slots:
-  void openFile(const QString& filename);
-
-private slots:
-  void on_actionOpen_triggered();
-
-private:
-  void updateNavigationActions();
+  void setIcon(const QPixmap& icn);
+  void setIcon(const QString& icn);
+  void setText(const QString& txt);
 
 private:
-  Ui::MainWindow *ui;
-
-  FileProvider* fi_provider_;
-  FrameProvider* fr_provider_;
-
-  StatusLabel* st_file_;
-  StatusLabel* st_frame_;
-  StatusLabel* st_zoom_;
-  StatusLabel* st_resolution_;
-  StatusLabel* st_format_;
+  QLabel* icon_lbl_;
+  QLabel* text_lbl_;
 };
 
-#endif // MAINWINDOW_H
+#endif // STATUSLABEL_H

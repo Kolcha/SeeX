@@ -24,14 +24,26 @@
 class ImageLabel : public QLabel
 {
   Q_OBJECT
+  Q_PROPERTY(QImage image READ image WRITE setImage)
+
 public:
   explicit ImageLabel(QWidget *parent = nullptr);
 
+  QImage image() const;
+
+public slots:
+  void setImage(const QImage& image);
+
 protected:
   void paintEvent(QPaintEvent* event);
+  void resizeEvent(QResizeEvent* event);
+
+private:
+  void updateImage();
 
 private:
   QPixmap transp_txd_;
+  QImage cur_image_;
 };
 
 #endif // IMAGELABEL_H

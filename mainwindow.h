@@ -40,25 +40,17 @@ public:
 public slots:
   void openFile(const QString& filename);
 
-protected:
-  void resizeEvent(QResizeEvent* event);
-
 private slots:
-  void displayImage(const QImage& img);
-
   void on_actionOpen_triggered();
 
 private:
   void updateNavigationActions();
-  void updateImage();
 
 private:
   Ui::MainWindow *ui;
 
   FileProvider* fi_provider_;
   FrameProvider* fr_provider_;
-
-  QImage cur_image_;
 };
 
 #endif // MAINWINDOW_H

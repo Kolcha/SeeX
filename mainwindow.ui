@@ -106,22 +106,6 @@
     <string>Open...</string>
    </property>
   </action>
-  <action name="actionCopy">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Copy</string>
-   </property>
-  </action>
-  <action name="actionPaste">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Paste</string>
-   </property>
-  </action>
   <action name="actionNextFile">
    <property name="enabled">
     <bool>false</bool>
@@ -186,33 +170,6 @@
    </property>
    <property name="shortcut">
     <string>Alt+Left</string>
-   </property>
-  </action>
-  <action name="actionZoomIn">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Zoom In</string>
-   </property>
-  </action>
-  <action name="actionZoomOut">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Zoom Out</string>
-   </property>
-  </action>
-  <action name="actionNormalSize">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Normal Size</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+0</string>
    </property>
   </action>
  </widget>

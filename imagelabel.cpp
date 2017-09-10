@@ -33,6 +33,17 @@ ImageLabel::ImageLabel(QWidget *parent) : QLabel(parent), transp_txd_(16, 16)
   setAlignment(Qt::AlignCenter);
 }
 
+QImage ImageLabel::image() const
+{
+  return cur_image_;
+}
+
+void ImageLabel::setImage(const QImage& image)
+{
+  cur_image_ = image;
+  updateImage();
+}
+
 void ImageLabel::paintEvent(QPaintEvent* event)
 {
   if (pixmap() && pixmap()->hasAlpha()) {
@@ -41,4 +52,20 @@ void ImageLabel::paintEvent(QPaintEvent* event)
     p.fillRect(img_rect, transp_txd_);
   }
   QLabel::paintEvent(event);
+}
+
+void ImageLabel::resizeEvent(QResizeEvent* event)
+{
+  if (!cur_image_.isNull()) updateImage();
+  QLabel::resizeEvent(event);
+}
+
+void ImageLabel::updateImage()
+{
+  if (cur_image_.width() > width() || cur_image_.height() > height()) {
+    QImage img = cur_image_.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    setPixmap(QPixmap::fromImage(img));
+  } else {
+    setPixmap(QPixmap::fromImage(cur_image_));
+  }
 }

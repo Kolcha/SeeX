@@ -46,7 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->actionNextFrame, &QAction::triggered, fr_provider_, &FrameProvider::nextFrame);
   connect(ui->actionPreviousFrame, &QAction::triggered, fr_provider_, &FrameProvider::previousFrame);
   connect(fr_provider_, &FrameProvider::fileNameChanged, this, &MainWindow::setWindowFilePath);
-  connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::displayImage);
+  connect(fr_provider_, &FrameProvider::currentFrameChanged, ui->label, &ImageLabel::setImage);
+  connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateNavigationActions);
 }
 
 MainWindow::~MainWindow()
@@ -59,19 +60,6 @@ void MainWindow::openFile(const QString& filename)
   QFileInfo fi(filename);
   fi_provider_->scanDir(fi.absolutePath());
   fi_provider_->setCurrentFile(fi.absoluteFilePath());
-}
-
-void MainWindow::resizeEvent(QResizeEvent* event)
-{
-  if (!cur_image_.isNull()) updateImage();
-  QMainWindow::resizeEvent(event);
-}
-
-void MainWindow::displayImage(const QImage& img)
-{
-  cur_image_ = img;
-  updateImage();
-  updateNavigationActions();
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -89,14 +77,4 @@ void MainWindow::updateNavigationActions()
   int frames_count = fr_provider_->framesCount();
   ui->actionNextFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == frames_count - 1);
   ui->actionPreviousFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == 0);
-}
-
-void MainWindow::updateImage()
-{
-  if (cur_image_.width() > ui->label->width() || cur_image_.height() > ui->label->height()) {
-    QImage img = cur_image_.scaled(ui->label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->label->setPixmap(QPixmap::fromImage(img));
-  } else {
-    ui->label->setPixmap(QPixmap::fromImage(cur_image_));
-  }
 }

@@ -47,6 +47,8 @@ public slots:
 
   void setCurrentFile(const QString& current_file);
 
+  void deleteCurrentFile();
+
   void nextFile();
   void previousFile();
 

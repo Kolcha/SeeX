@@ -78,6 +78,28 @@ void FileProvider::setCurrentFile(const QString& current_file)
   if (idx != -1) setCurrentIndex(idx);
 }
 
+void FileProvider::deleteCurrentFile()
+{
+  Q_ASSERT(0 <= cur_index_ && cur_index_ < files_.size());
+  int cur_index = currentIndex();
+  if (!QFile::remove(currentFile())) return;
+  files_.removeAt(cur_index);
+  emit filesCountChanged(files_.size());
+
+  int idx = cur_index - 1;
+  while (++idx < filesCount() && !isFileSupported(fileAtIndex(idx)));
+  if (idx < filesCount()) {
+    setCurrentIndex(idx);
+  } else {
+    int idx = cur_index;
+    while (--idx >= 0 && !isFileSupported(fileAtIndex(idx)));
+    if (idx >= 0)
+      setCurrentIndex(idx);
+    else
+      emit currentFileChanged(QString());
+  }
+}
+
 void FileProvider::nextFile()
 {
   Q_ASSERT(0 <= cur_index_ && cur_index_ < files_.size() - 1);

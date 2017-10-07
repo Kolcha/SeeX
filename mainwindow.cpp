@@ -21,6 +21,7 @@
 
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QMessageBox>
 
 #include "fileprovider.h"
 #include "frameprovider.h"
@@ -28,7 +29,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::MainWindow)
+  ui(new Ui::MainWindow),
+  del_no_confirm_(false)
 {
   ui->setupUi(this);
 
@@ -87,6 +89,20 @@ void MainWindow::on_actionOpen_triggered()
   if (!filename.isEmpty()) openFile(filename);
 }
 
+void MainWindow::on_actionDelete_triggered()
+{
+  if (!del_no_confirm_) {
+    QMessageBox::StandardButton btn = QMessageBox::question(
+          this, tr("Delete file"),
+          tr("Are you sure do you want to delete this file? This is can not be undone."),
+          QMessageBox::YesToAll | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (btn == QMessageBox::No) return;
+    Q_ASSERT(btn == QMessageBox::YesToAll || btn == QMessageBox::Yes);
+    del_no_confirm_ = btn == QMessageBox::YesToAll;
+  }
+  fi_provider_->deleteCurrentFile();
+}
+
 void MainWindow::updateNavigationActions()
 {
   ui->actionNextFile->setDisabled(fi_provider_->currentIndex() == fi_provider_->filesCount() - 1);
@@ -96,6 +112,7 @@ void MainWindow::updateNavigationActions()
   int frames_count = fr_provider_->framesCount();
   ui->actionNextFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == frames_count - 1);
   ui->actionPreviousFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == 0);
+  ui->actionDelete->setEnabled(!ui->label->image().isNull());
 }
 
 void MainWindow::updateStatusBar()

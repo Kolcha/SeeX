@@ -84,6 +84,8 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete"/>
    </widget>
    <widget class="QMenu" name="menuGo">
     <property name="title">
@@ -170,6 +172,17 @@
    </property>
    <property name="shortcut">
     <string>Alt+Left</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

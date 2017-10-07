@@ -46,6 +46,7 @@ protected:
 
 private slots:
   void on_actionOpen_triggered();
+  void on_actionDelete_triggered();
 
 private:
   void updateNavigationActions();
@@ -62,6 +63,8 @@ private:
   StatusLabel* st_zoom_;
   StatusLabel* st_resolution_;
   StatusLabel* st_format_;
+
+  bool del_no_confirm_;
 };
 
 #endif // MAINWINDOW_H

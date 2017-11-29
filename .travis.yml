@@ -1,0 +1,62 @@
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+
+        coverity_scan:
+          project:
+            name: Kolcha/SeeX
+            version: 1.0.4
+            description: "Build submitted via Travis CI"
+
+          build_command: make
+
+          branch_pattern: master
+
+        sonarcloud:
+          organization: "kolcha-github"
+
+      env:
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+         - QT_URL="https://www.dropbox.com/s/gwsro2zw004vfed/Qt-5.6.3.tar.xz?dl=1"
+
+      script:
+        - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+        - sonar-scanner
+
+      cache:
+        directories:
+          - '$HOME/.sonar/cache'
+
+    - os: osx
+      osx_image: xcode9.1
+      env:
+        - QT_URL="https://www.dropbox.com/s/lixbkg2q819vkck/Qt-5.8.1.tar.xz?dl=1"
+
+      script: make -j2
+
+branches:
+  only:
+    - master
+
+install:
+  # download resources & prebuilt libraries
+  - |
+    curl $QT_URL -L -s | tar xJ
+    qtdir=$(ls | grep Qt)
+    ./scripts/patch_qt.py -q $qtdir -d /usr/local/$qtdir
+    sudo mv $qtdir /usr/local/
+    export PATH="/usr/local/$qtdir/bin:$PATH"
+
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then eval "${MATRIX_EVAL}"; fi
+  - qmake -config release

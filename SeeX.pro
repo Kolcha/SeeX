@@ -33,5 +33,5 @@ FORMS += \
 RESOURCES += \
         images.qrc
 
-ICON = macos/SeeX.icns
-QMAKE_INFO_PLIST = macos/SeeX.plist
+ICON = SeeX.icns
+QMAKE_INFO_PLIST = SeeX.plist

@@ -22,6 +22,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QWindow>
 
 #include "fileprovider.h"
 #include "frameprovider.h"
@@ -63,6 +64,9 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->statusBar->addPermanentWidget(st_format_);
   ui->statusBar->addPermanentWidget(st_resolution_);
   ui->statusBar->addPermanentWidget(st_zoom_);
+
+  connect(this->windowHandle(), &QWindow::visibilityChanged,
+          [this] (QWindow::Visibility v) { ui->statusBar->setHidden(v == QWindow::FullScreen); });
 }
 
 MainWindow::~MainWindow()

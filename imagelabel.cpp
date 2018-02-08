@@ -68,4 +68,7 @@ void ImageLabel::updateImage()
   } else {
     setPixmap(QPixmap::fromImage(cur_image_));
   }
+  // workaround. in fullscreen mode windows is not repainted,
+  // update() somewhat has no effect, so force repaint()
+  repaint();
 }

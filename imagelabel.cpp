@@ -48,7 +48,8 @@ void ImageLabel::paintEvent(QPaintEvent* event)
 {
   if (pixmap() && pixmap()->hasAlpha()) {
     QPainter p(this);
-    QRect img_rect(rect().center() - pixmap()->rect().center(), pixmap()->size());
+    QRectF img_rect(rect().center() - pixmap()->rect().center() / pixmap()->devicePixelRatio(),
+                    pixmap()->size() / pixmap()->devicePixelRatio());
     p.fillRect(img_rect, transp_txd_);
   }
   QLabel::paintEvent(event);
@@ -63,7 +64,11 @@ void ImageLabel::resizeEvent(QResizeEvent* event)
 void ImageLabel::updateImage()
 {
   if (cur_image_.width() > width() || cur_image_.height() > height()) {
-    QImage img = cur_image_.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    bool hidpi = (cur_image_.width() >= width() * devicePixelRatioF()) ||
+        (cur_image_.height() >= height() * devicePixelRatioF());
+    QSize scaled_size = hidpi ? size() * devicePixelRatioF() : size();
+    QImage img = cur_image_.scaled(scaled_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (hidpi) img.setDevicePixelRatio(devicePixelRatioF());
     setPixmap(QPixmap::fromImage(img));
   } else {
     setPixmap(QPixmap::fromImage(cur_image_));

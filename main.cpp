@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 {
   QApplication::setApplicationDisplayName("SeeX");
   QApplication::setApplicationName("SeeX");
-  QApplication::setApplicationVersion("1.0.5.122");
+  QApplication::setApplicationVersion("1.0.5.130");
   QApplication::setOrganizationName("Nick Korotysh");
   QApplication::setOrganizationDomain("seex.kolcha.github.io");
 

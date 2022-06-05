@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(SeeX VERSION 1.0.5 LANGUAGES CXX)
+project(SeeX VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

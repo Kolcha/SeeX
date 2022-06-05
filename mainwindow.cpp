@@ -44,9 +44,6 @@ MainWindow::MainWindow(QWidget* parent) :
   ui->statusBar->addPermanentWidget(st_format_);
   ui->statusBar->addPermanentWidget(st_resolution_);
   ui->statusBar->addPermanentWidget(st_zoom_);
-
-  connect(this->windowHandle(), &QWindow::visibilityChanged, ui->statusBar,
-          [this] (QWindow::Visibility v) { ui->statusBar->setHidden(v == QWindow::FullScreen); });
 }
 
 MainWindow::~MainWindow()
@@ -59,6 +56,14 @@ void MainWindow::openFile(const QString& filename)
   QFileInfo fi(filename);
   fi_provider_->scanDir(fi.absolutePath());
   fi_provider_->setCurrentFile(fi.absoluteFilePath());
+}
+
+void MainWindow::changeEvent(QEvent* event)
+{
+  if (event->type() == QEvent::WindowStateChange) {
+    ui->statusBar->setVisible(windowState() != Qt::WindowFullScreen);
+  }
+  QMainWindow::changeEvent(event);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

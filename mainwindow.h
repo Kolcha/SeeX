@@ -24,7 +24,8 @@ public slots:
   void openFile(const QString& filename);
 
 protected:
-  void resizeEvent(QResizeEvent* event);
+  void changeEvent(QEvent* event) override;
+  void resizeEvent(QResizeEvent* event) override;
 
 private slots:
   void on_actionOpen_triggered();

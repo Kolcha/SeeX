@@ -64,7 +64,7 @@ void FileProvider::deleteCurrentFile()
 {
   Q_ASSERT(0 <= cur_index_ && cur_index_ < files_.size());
   int cur_index = currentIndex();
-  if (!QFile::remove(currentFile())) return;
+  if (!QFile::moveToTrash(currentFile())) return;
   files_.removeAt(cur_index);
   emit filesCountChanged(files_.size());
 

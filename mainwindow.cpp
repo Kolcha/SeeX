@@ -87,7 +87,7 @@ void MainWindow::on_actionDelete_triggered()
   if (!del_no_confirm_) {
     QMessageBox::StandardButton btn = QMessageBox::question(
           this, tr("Delete file"),
-          tr("Are you sure do you want to delete this file? This is can not be undone."),
+          tr("Are you sure do you want to delete this file?"),
           QMessageBox::YesToAll | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
     if (btn == QMessageBox::No) return;
     Q_ASSERT(btn == QMessageBox::YesToAll || btn == QMessageBox::Yes);

@@ -34,6 +34,7 @@ private slots:
 private:
   void updateNavigationActions();
   void updateStatusBar();
+  void handleEscKey();
 
 private:
   Ui::MainWindow* ui;

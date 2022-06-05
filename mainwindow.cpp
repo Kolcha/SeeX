@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QShortcut>
 #include <QWindow>
 
 #include "fileprovider.h"
@@ -44,6 +45,9 @@ MainWindow::MainWindow(QWidget* parent) :
   ui->statusBar->addPermanentWidget(st_format_);
   ui->statusBar->addPermanentWidget(st_resolution_);
   ui->statusBar->addPermanentWidget(st_zoom_);
+
+  QShortcut* esc_shortcut = new QShortcut(QKeySequence::fromString(QStringLiteral("Esc")), this);
+  connect(esc_shortcut, &QShortcut::activated, this, &MainWindow::handleEscKey);
 }
 
 MainWindow::~MainWindow()
@@ -61,7 +65,7 @@ void MainWindow::openFile(const QString& filename)
 void MainWindow::changeEvent(QEvent* event)
 {
   if (event->type() == QEvent::WindowStateChange) {
-    ui->statusBar->setVisible(windowState() != Qt::WindowFullScreen);
+    ui->statusBar->setVisible(!windowState().testFlag(Qt::WindowFullScreen));
   }
   QMainWindow::changeEvent(event);
 }
@@ -117,4 +121,13 @@ void MainWindow::updateStatusBar()
     st_format_->setText(fr_provider_->fileFormat());
   }
   st_resolution_->setText(QString("%1x%2").arg(cur_img.width()).arg(cur_img.height()));
+}
+
+void MainWindow::handleEscKey()
+{
+  if (windowState().testFlag(Qt::WindowFullScreen)) {
+    setWindowState(windowState() ^ Qt::WindowFullScreen);
+  } else {
+    close();
+  }
 }

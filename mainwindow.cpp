@@ -17,8 +17,6 @@ MainWindow::MainWindow(QWidget* parent) :
 {
   ui->setupUi(this);
 
-  ui->scrollArea->setBackgroundRole(QPalette::Dark);
-
   ui->actionOpen->setShortcut(QKeySequence::Open);
 
   fi_provider_ = new FileProvider(this);

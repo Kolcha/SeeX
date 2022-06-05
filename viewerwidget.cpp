@@ -78,8 +78,7 @@ QSize ViewerWidget::minimumSizeHint() const
   QSize hint(400, 300);
   if (!m_impl->image().isNull())
     hint = m_impl->image().size() / devicePixelRatioF();
-  // do not allow widget to occupy more that 3/4 of screen space
-  hint.scale(hint.boundedTo(screen()->availableSize() * 3/4), Qt::KeepAspectRatio);
+  hint.scale(hint.boundedTo(screen()->availableSize() * 7/8), Qt::KeepAspectRatio);
   return hint;
 }
 

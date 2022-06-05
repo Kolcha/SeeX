@@ -26,9 +26,9 @@ int main(int argc, char *argv[])
   QApplication::setApplicationVersion("1.0.5.130");
   QApplication::setOrganizationName("Nick Korotysh");
   QApplication::setOrganizationDomain("seex.kolcha.github.io");
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-
+#endif
   Application a(argc, argv);
   MainWindow w;
   QObject::connect(&a, &Application::fileOpened, &w, &MainWindow::openFile);

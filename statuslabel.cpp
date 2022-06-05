@@ -27,7 +27,7 @@ StatusLabel::StatusLabel(QWidget *parent) : QWidget(parent)
   icon_lbl_ = new QLabel;
   text_lbl_ = new QLabel;
   QHBoxLayout* l = new QHBoxLayout;
-  l->setMargin(0);
+  l->setContentsMargins(0, 0, 0, 0);
   l->setSpacing(4);
   l->addWidget(icon_lbl_);
   l->addWidget(text_lbl_);
@@ -48,7 +48,7 @@ StatusLabel::StatusLabel(const QString& pxm, const QString& txt, QWidget* parent
 
 QPixmap StatusLabel::icon() const
 {
-  return *icon_lbl_->pixmap();
+  return icon_lbl_->pixmap(Qt::ReturnByValue);
 }
 
 QString StatusLabel::text() const

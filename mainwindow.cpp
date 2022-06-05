@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui->statusBar->addPermanentWidget(st_resolution_);
   ui->statusBar->addPermanentWidget(st_zoom_);
 
-  connect(this->windowHandle(), &QWindow::visibilityChanged,
+  connect(this->windowHandle(), &QWindow::visibilityChanged, ui->statusBar,
           [this] (QWindow::Visibility v) { ui->statusBar->setHidden(v == QWindow::FullScreen); });
 }
 

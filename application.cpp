@@ -20,10 +20,6 @@
 
 #include <QFileOpenEvent>
 
-Application::Application(int& argc, char** argv) : QApplication(argc, argv)
-{
-}
-
 bool Application::event(QEvent* e)
 {
   if (e->type() == QEvent::FileOpen) {

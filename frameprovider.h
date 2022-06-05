@@ -30,7 +30,7 @@ class FrameProvider : public QObject
   Q_PROPERTY(QImage currentFrame READ currentFrame NOTIFY currentFrameChanged)
   Q_PROPERTY(int framesCount READ framesCount NOTIFY framesCountChanged)
   Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
-  Q_PROPERTY(QString fileFormat READ fileFormat)
+  Q_PROPERTY(QString fileFormat READ fileFormat CONSTANT)
 
 public:
   explicit FrameProvider(QObject* parent = nullptr);

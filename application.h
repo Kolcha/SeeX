@@ -24,8 +24,9 @@
 class Application : public QApplication
 {
   Q_OBJECT
+
 public:
-  Application(int& argc, char** argv);
+  using QApplication::QApplication;
 
 signals:
   void fileOpened(const QString& filename);

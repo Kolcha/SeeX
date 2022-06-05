@@ -21,8 +21,6 @@ set(PROJECT_SOURCES
     fileprovider.h
     frameprovider.cpp
     frameprovider.h
-    imagelabel.cpp
-    imagelabel.h
     images.qrc
     main.cpp
     mainwindow.cpp
@@ -30,6 +28,8 @@ set(PROJECT_SOURCES
     mainwindow.ui
     statuslabel.cpp
     statuslabel.h
+    viewerwidget.cpp
+    viewerwidget.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->actionNextFrame, &QAction::triggered, fr_provider_, &FrameProvider::nextFrame);
   connect(ui->actionPreviousFrame, &QAction::triggered, fr_provider_, &FrameProvider::previousFrame);
   connect(fr_provider_, &FrameProvider::fileNameChanged, this, &MainWindow::setWindowFilePath);
-  connect(fr_provider_, &FrameProvider::currentFrameChanged, ui->label, &ImageLabel::setImage);
+  connect(fr_provider_, &FrameProvider::currentFrameChanged, ui->viewer, &ViewerWidget::setImage);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateNavigationActions);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateStatusBar);
 
@@ -116,19 +116,19 @@ void MainWindow::updateNavigationActions()
   int frames_count = fr_provider_->framesCount();
   ui->actionNextFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == frames_count - 1);
   ui->actionPreviousFrame->setDisabled(frames_count <= 1 || fr_provider_->currentIndex() == 0);
-  ui->actionDelete->setEnabled(!ui->label->image().isNull());
+  ui->actionDelete->setEnabled(!ui->viewer->image().isNull());
 }
 
 void MainWindow::updateStatusBar()
 {
   st_file_->setText(QString("%1/%2").arg(fi_provider_->currentIndex() + 1).arg(fi_provider_->filesCount()));
   st_frame_->setText(QString("%1/%2").arg(fr_provider_->currentIndex() + 1).arg(fr_provider_->framesCount()));
-  QImage cur_img = ui->label->image();
+  QImage cur_img = ui->viewer->image();
   if (cur_img.isNull()) {
     st_zoom_->setText("100 %");
     st_format_->setText("-");
   } else {
-    st_zoom_->setText(QString("%1 %").arg(100 * ui->label->pixmap()->height() / cur_img.height()));
+    st_zoom_->setText(QString("%1 %").arg(qRound(100 * ui->viewer->zoom())));
     st_format_->setText(fr_provider_->fileFormat());
   }
   st_resolution_->setText(QString("%1x%2").arg(cur_img.width()).arg(cur_img.height()));

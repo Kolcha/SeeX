@@ -15,7 +15,7 @@ SOURCES += main.cpp \
         application.cpp \
         fileprovider.cpp \
         frameprovider.cpp \
-        imagelabel.cpp \
+        viewerwidget.cpp \
         mainwindow.cpp \
         statuslabel.cpp
 
@@ -23,7 +23,7 @@ HEADERS += \
         application.h \
         fileprovider.h \
         frameprovider.h \
-        imagelabel.h \
+        viewerwidget.hpp \
         mainwindow.h \
         statuslabel.h
 

@@ -33,7 +33,7 @@ signals:
 public slots:
 
 protected:
-  bool event(QEvent *e) override;
+  bool event(QEvent* e) override;
 };
 
 #endif // APPLICATION_H

@@ -30,7 +30,7 @@ class StatusLabel : public QWidget
   Q_PROPERTY(QString text READ text WRITE setText)
 
 public:
-  explicit StatusLabel(QWidget *parent = nullptr);
+  explicit StatusLabel(QWidget* parent = nullptr);
   StatusLabel(const QPixmap& pxm, const QString& txt, QWidget* parent = nullptr);
   StatusLabel(const QString& pxm, const QString& txt, QWidget* parent = nullptr);
 

@@ -18,7 +18,7 @@
 
 #include "frameprovider.h"
 
-FrameProvider::FrameProvider(QObject *parent) : QObject(parent), cur_index_(-1)
+FrameProvider::FrameProvider(QObject* parent) : QObject(parent), cur_index_(-1)
 {
   reader_.setAutoDetectImageFormat(true);
   reader_.setAutoTransform(true);

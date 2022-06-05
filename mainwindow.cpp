@@ -28,7 +28,7 @@
 #include "frameprovider.h"
 #include "statuslabel.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
   del_no_confirm_(false)

@@ -30,7 +30,7 @@ static bool isFileSupported(const QString& file)
 }
 
 
-FileProvider::FileProvider(QObject *parent) : QObject(parent), cur_index_(-1)
+FileProvider::FileProvider(QObject* parent) : QObject(parent), cur_index_(-1)
 {
   dir_.setFilter(QDir::Files | QDir::Readable);
   dir_.setSorting(QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);

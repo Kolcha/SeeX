@@ -31,7 +31,7 @@ class FileProvider : public QObject
   Q_PROPERTY(QString absolutePath READ absolutePath WRITE scanDir)
 
 public:
-  explicit FileProvider(QObject *parent = nullptr);
+  explicit FileProvider(QObject* parent = nullptr);
 
   QString currentFile() const;
   int currentIndex() const;

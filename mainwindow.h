@@ -35,7 +35,7 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
+  explicit MainWindow(QWidget* parent = 0);
   ~MainWindow();
 
 public slots:
@@ -53,7 +53,7 @@ private:
   void updateStatusBar();
 
 private:
-  Ui::MainWindow *ui;
+  Ui::MainWindow* ui;
 
   FileProvider* fi_provider_;
   FrameProvider* fr_provider_;

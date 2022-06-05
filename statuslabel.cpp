@@ -22,7 +22,7 @@
 #include <QHBoxLayout>
 #include <QIcon>
 
-StatusLabel::StatusLabel(QWidget *parent) : QWidget(parent)
+StatusLabel::StatusLabel(QWidget* parent) : QWidget(parent)
 {
   icon_lbl_ = new QLabel;
   text_lbl_ = new QLabel;

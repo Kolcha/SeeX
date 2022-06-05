@@ -19,7 +19,7 @@
 #include "mainwindow.h"
 #include "application.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   QApplication::setApplicationDisplayName("SeeX");
   QApplication::setApplicationName("SeeX");

@@ -33,7 +33,7 @@ class FrameProvider : public QObject
   Q_PROPERTY(QString fileFormat READ fileFormat)
 
 public:
-  explicit FrameProvider(QObject *parent = nullptr);
+  explicit FrameProvider(QObject* parent = nullptr);
 
   QImage currentFrame() const;
   int currentIndex() const;

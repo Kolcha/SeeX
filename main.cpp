@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
   Application a(argc, argv);
   MainWindow w;
   QObject::connect(&a, &Application::fileOpened, &w, &MainWindow::openFile);
-  w.showMaximized();
+  w.show();
 
   return a.exec();
 }

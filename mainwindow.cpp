@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QScreen>
 #include <QShortcut>
 #include <QWindow>
 
@@ -72,6 +73,11 @@ void MainWindow::changeEvent(QEvent* event)
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
+  QSizePolicy ignored_policy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+  if (!windowFilePath().isEmpty() && ui->viewer->sizePolicy() != ignored_policy) {
+    move(pos() + screen()->availableGeometry().center() - frameGeometry().center());
+    ui->viewer->setSizePolicy(ignored_policy);
+  }
   updateStatusBar();
   QMainWindow::resizeEvent(event);
 }

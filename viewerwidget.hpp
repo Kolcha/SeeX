@@ -19,8 +19,6 @@ public:
 
   qreal zoom() const;
 
-signals:
-
 public slots:
   void setImage(const QImage& image);
 

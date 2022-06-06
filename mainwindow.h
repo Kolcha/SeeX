@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 
-
 class FileProvider;
 class FrameProvider;
 class StatusLabel;

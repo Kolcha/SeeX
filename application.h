@@ -13,8 +13,6 @@ public:
 signals:
   void fileOpened(const QString& filename);
 
-public slots:
-
 protected:
   bool event(QEvent* e) override;
 };

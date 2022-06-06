@@ -36,11 +36,11 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateNavigationActions);
   connect(fr_provider_, &FrameProvider::currentFrameChanged, this, &MainWindow::updateStatusBar);
 
-  st_file_ = new StatusLabel(":/images/status/folder.svg", "0/0");
-  st_frame_ = new StatusLabel(":/images/status/frame.svg", "0/0");
-  st_zoom_ = new StatusLabel(":/images/status/zoom.svg", "100 %");
-  st_resolution_ = new StatusLabel(":/images/status/resolution.svg", "0x0");
-  st_format_ = new StatusLabel(":/images/status/file.svg", "-");
+  st_file_ = new StatusLabel(QIcon(":/images/status/folder.svg.p"), "0/0");
+  st_frame_ = new StatusLabel(QIcon(":/images/status/frame.svg.p"), "0/0");
+  st_zoom_ = new StatusLabel(QIcon(":/images/status/zoom.svg.p"), "100 %");
+  st_resolution_ = new StatusLabel(QIcon(":/images/status/resolution.svg.p"), "0x0");
+  st_format_ = new StatusLabel(QIcon(":/images/status/file.svg.p"), "-");
   ui->statusBar->addWidget(st_file_);
   ui->statusBar->addWidget(st_frame_);
   ui->statusBar->addPermanentWidget(st_format_);

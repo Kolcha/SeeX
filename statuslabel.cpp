@@ -1,5 +1,6 @@
 #include "statuslabel.h"
 
+#include <QEvent>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QIcon>
@@ -16,21 +17,15 @@ StatusLabel::StatusLabel(QWidget* parent) : QWidget(parent)
   setLayout(l);
 }
 
-StatusLabel::StatusLabel(const QPixmap& pxm, const QString& txt, QWidget* parent) : StatusLabel(parent)
+StatusLabel::StatusLabel(const QIcon& icn, const QString& txt, QWidget* parent) : StatusLabel(parent)
 {
-  setIcon(pxm);
+  setIcon(icn);
   setText(txt);
 }
 
-StatusLabel::StatusLabel(const QString& pxm, const QString& txt, QWidget* parent) : StatusLabel(parent)
+QIcon StatusLabel::icon() const
 {
-  setIcon(pxm);
-  setText(txt);
-}
-
-QPixmap StatusLabel::icon() const
-{
-  return icon_lbl_->pixmap(Qt::ReturnByValue);
+  return icon_;
 }
 
 QString StatusLabel::text() const
@@ -38,17 +33,20 @@ QString StatusLabel::text() const
   return text_lbl_->text();
 }
 
-void StatusLabel::setIcon(const QPixmap& icn)
+void StatusLabel::setIcon(const QIcon& icn)
 {
-  icon_lbl_->setPixmap(icn);
-}
-
-void StatusLabel::setIcon(const QString& icn)
-{
-  setIcon(QIcon(icn).pixmap(16));
+  icon_ = icn;
+  icon_lbl_->setPixmap(icn.pixmap(icon_size_));
 }
 
 void StatusLabel::setText(const QString& txt)
 {
   text_lbl_->setText(txt);
+}
+
+void StatusLabel::changeEvent(QEvent* event)
+{
+  if (event->type() == QEvent::PaletteChange)
+    icon_lbl_->setPixmap(icon_.pixmap(icon_size_));
+  QWidget::changeEvent(event);
 }
